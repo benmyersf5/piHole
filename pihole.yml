@@ -1,0 +1,58 @@
+# Docker Compose file for deploying my pihole server
+services:
+  pihole:
+    container_name: pihole
+    hostname: pihole
+    domainname: vanmyers.local
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+    environment:
+      TZ: 'America/New_York'
+      INSTALL_WEB_INTERFACE: "true"
+      WEBPASSWORD: ""
+      PIHOLE_INTERFACE: "eth0"
+      VIRTUAL_HOST: "pihole.vanmyers.local"
+      QUERY_LOGGING: "true"
+      BLOCKING_ENABLED: "true"
+      WEBUIBOXEDLAYOUT: "boxed"
+      WEBTHEME: "default-darker"
+      DNSMASQ_LISTENING: "single"
+      DNS_FQDN_REQUIRED: "false"
+      DNS_BOGUS_PRIV: "false"
+      DNSSEC: "false"
+      REV_SERVER: "false"
+      DHCP_ACTIVE: "true"
+      DHCP_START: "10.0.0.3"
+      DHCP_END: "10.0.0.99"
+      DHCP_ROUTER: "10.0.0.1"
+      DHCP_LEASETIME: "24"
+      PIHOLE_DOMAIN: "vanmyers.local"
+      DHCP_IPv6: "false"
+      DHCP_rapid_commit: "true"
+      TEMPERATUREUNIT: "F"
+      PIHOLE_DNS_1: "2001:4860:4860:0:0:0:0:8888"
+      PIHOLE_DNS_2: "2620:119:35::35"
+      PIHOLE_DNS_4: "10.0.0.53"
+      
+    # Volumes store your data between container upgrades
+    volumes:
+      - "/home/ben/docker/pihole/:/etc/pihole/"
+      - '/home/ben/docker/pihole/dnsmasq.d/:/etc/dnsmasq.d'
+    #   https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+    cap_add:
+      - NET_ADMIN # Required if you are using Pi-hole as your DHCP server, else not needed
+    restart: unless-stopped
+    networks:
+        altair_net:
+            ipv4_address: 10.0.1.153
+        internal: 
+            ipv4_address: 172.18.0.3
+networks:
+    altair_net:
+      external: true
+    internal:
+      external: true
