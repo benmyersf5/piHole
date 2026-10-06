@@ -15,7 +15,7 @@ services:
     environment:
       TZ: 'America/New_York'
       # Set a password to access the web interface. Not setting one will result in a random password being assigned
-      FTLCONF_webserver_api_password: 'L4BP4ss!'
+      FTLCONF_webserver_api_password: ''
       FTLCONF_dns_listeningMode: 'all'
       FTLCONF_dns_dnssec: 'false'
       FTLCONF_misc_etc_dnsmasq_d: 'true'
